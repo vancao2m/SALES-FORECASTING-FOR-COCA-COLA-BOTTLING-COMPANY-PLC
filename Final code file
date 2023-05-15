@@ -1,0 +1,99 @@
+# Loading the required libraries:
+## Input code to download ‘forecast’ package:
+Install.packages (‘forecast’, dependencies = TRUE)
+## Input code to download ‘fpp2’ package:
+Install.packages(‘fpp2’,dependencies = TRUE)
+library(readxl)
+library(ggplot2)
+library(forecast)
+library(TTR)
+library(dplyr)
+
+# Reading the data:
+library(readxl)
+dat <- read_excel("C:/Users/Ai Van/Downloads/newdata.xlsx")
+View(dat)
+# Preparing the Time series object:
+dat_ts <- ts (dat[,2],start = c(2004,1),end = c(2011,4),frequency=4)
+# Data partitioning:
+dat_train = window(dat_ts,end = c(2011,4))
+dat_test = window(dat_ts, start = c(2012,1))
+nrow(dat_train)
+nrow(dat_test)
+
+# Required packages:
+install.packages('fpp2')
+install.packages('forecast')
+install.packages('TTR')
+install.packages('astsa')
+install.packages('xts')
+install.packages('tsfknn')
+install.packages('tseries')
+install.packages('itsmr')
+install.packages('smooth')
+install.packages('Mcomp')
+install.packages('TSS')
+install.packages('Metrics')
+install.packages('fUnitRoots')
+library(Metrics)
+library(TTR)
+library(ggplot2)
+library(forecast)
+library(readxl)
+library(fpp2)
+library(dplyr)
+library(forecast)
+library(astsa)
+library(xts)
+library(tsfknn)
+library(tseries)
+library(itsmr)
+library(smooth)
+library(Mcomp)
+library(TSA)
+library(fUnitRoots)
+
+# Naïve forecasting method:
+naive_mod <- naive(dat_train, h = 8)
+summary(naive_mod)
+accuracy(naive_mod,dat_test)
+
+# Winter
+## holt forecasting method:
+fit1 <- hw(dat_train, seasonal = "additive")
+summary(fit1)
+accuracy(fit1,dat_test)
+fit2 <- hw(dat_train, seasonal = "multiplicative")
+summary(fit2)
+accuracy(fit2,dat_test)
+
+# Moving average forecastingmodel:
+require(zoo)
+dat_ma<-ts(data[,2], start = c(2004,2), end = c(2013, 4), frequency = 4)
+View(dat_ma)
+rollmean(dat_ma, 3, align = "right")
+rollmean(dat_ma, 5, aligh = "right")
+rollmean(dat_ma, 7, aligh = "right")
+
+# ARIMA method:
+components.ts = decompose(dat_ts)
+plot(components.ts)
+library("fUnitRoots")
+urkpssTest(dat_ts, type = c("tau"), lags = c("short"),use.lag = NULL, doplot = TRUE)
+tsstationary = diff(dat_ts, differences=1)
+plot(tsstationary)
+tsstationary
+acf(dat_ts,lag.max=34)
+timeseriesseasonallyadjusted <- dat_ts- components.ts$seasonal
+tsstationary <- diff(timeseriesseasonallyadjusted, differences=1)
+tsstationary
+acf(tsstationary, lag.max=34)
+pacf(tsstationary, lag.max=34)
+fitARIMA <- arima(dat_ts, order=c(1,1,1),seasonal = list(order = c(1,0,0), period =4),method="ML")
+library(lmtest)
+coeftest(fitARIMA)
+fitARIMA
+confint(fitARIMA)
+futurVal <- forecast(fitARIMA,h=8,level = c(99.5))
+plot(futurVal)
+futurVal
